@@ -3,13 +3,14 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import glob
 import pandas as pd
+import sys
 
 # ①ディゾルブ検出の処理
 # ②rgbによるシーン検出の処理
-
+print('path_name =:', sys.argv[1])
 image_arrays= np.empty((0))
 image_arrays2= np.empty((0))
-path = "./frames/*"
+path = sys.argv[1]
 files = sorted(glob.glob(path))
 
 count = 0
@@ -194,9 +195,6 @@ r_imgs = r_imgs*value_list
 
 r_imgs=np.insert(r_imgs,0,r_imgs[0])
 r_imgs=np.append(r_imgs,r_imgs[-1])
-print(r_imgs)
-print(len(r_imgs))
-print(len(files))
 
 ext_file = np.empty(0)
 for i in range(len(r_imgs)):
@@ -209,7 +207,13 @@ for i in range(len(r_imgs)):
 
 ext_file = np.unique(ext_file)
 
-print(ext_file)
+
+f = open('dissolve/extract.txt', 'a')
+f.write(path+"\n")
+for ext_name in ext_file:
+    f.write(ext_name+"\n")
+f.write("\n")
+f.close()
 
 X = np.arange(0,len(r_imgs))
 X2 = np.arange(0,len(value_list))
